@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  color: MyString
+  size: MyString
+  description: MyText
+  is_deal: false
+  discount: 1
+  price: 9.99
+  deal_price: 9.99
+  in_stock: 1
+  enabled: false
+
+two:
+  name: MyString
+  color: MyString
+  size: MyString
+  description: MyText
+  is_deal: false
+  discount: 1
+  price: 9.99
+  deal_price: 9.99
+  in_stock: 1
+  enabled: false
