@@ -27,7 +27,7 @@ namespace :dev do
         model: Model.all.sample,
         description: "Description text #{i}",
         is_deal: [true,false].sample,
-        discount: rand(20..40),
+        discount: [0, rand(10..40)].sample,
         price: Faker::Number.decimal(l_digits: 2),
         deal_price: Faker::Number.decimal(l_digits: 2) ,
         in_stock: rand(0..30),
@@ -48,6 +48,42 @@ namespace :dev do
         product.save!
       end  
     end
+    puts "Finished creating images"
+    puts "Creating orders"
+    5.times do |i|
+      Order.create!(
+        status: [0, 1, 2].sample,
+        discount: rand(20..40),
+        coupon: 'code',
+        total: Faker::Number.decimal(l_digits: 2)
+      )
+    end
+    puts "Finished creating orders"
+    puts "Creating order_items"
+    Order.all.each do |order|
+      Random.rand(5).times do |i|
+        product = Product.all.sample
+        quantity = rand(1..5)
+        productPrice = product.discount > 0 ? product.price * (product.discount/100) : product.is_deal ? product.deal_price : product.price
+        order_item = OrderItem.create!(
+          name: product.name,
+          product_id: product.id,
+          color: product.color,
+          size: product.size,
+          description: product.description,
+          is_deal: product.is_deal,
+          discount: product.discount,
+          price: product.price,
+          deal_price: product.deal_price,
+          quantity: quantity,
+          order: Order.all.sample,
+          subtotal: productPrice * quantity
+        )
+        order.order_items << order_item
+        order.save!
+      end  
+    end
+    puts "Finished creating order_items"
   end
 
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_03_191653) do
+ActiveRecord::Schema.define(version: 2021_05_04_183322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,34 @@ ActiveRecord::Schema.define(version: 2021_05_03_191653) do
     t.index ["category_id"], name: "index_models_on_category_id"
   end
 
+  create_table "order_items", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.string "size"
+    t.text "description"
+    t.boolean "is_deal"
+    t.integer "discount"
+    t.decimal "price", precision: 6, scale: 2
+    t.decimal "deal_price", precision: 6, scale: 2
+    t.integer "quantity"
+    t.decimal "subtotal", precision: 6, scale: 2
+    t.bigint "product_id", null: false
+    t.bigint "order_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["product_id"], name: "index_order_items_on_product_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "status"
+    t.integer "discount"
+    t.string "coupon"
+    t.decimal "total", precision: 6, scale: 2
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.string "color"
@@ -45,8 +73,8 @@ ActiveRecord::Schema.define(version: 2021_05_03_191653) do
     t.text "description"
     t.boolean "is_deal"
     t.integer "discount"
-    t.decimal "price", precision: 4, scale: 2
-    t.decimal "deal_price", precision: 4, scale: 2
+    t.decimal "price", precision: 6, scale: 2
+    t.decimal "deal_price", precision: 6, scale: 2
     t.integer "in_stock"
     t.boolean "enabled"
     t.datetime "created_at", precision: 6, null: false
@@ -57,5 +85,7 @@ ActiveRecord::Schema.define(version: 2021_05_03_191653) do
 
   add_foreign_key "images", "products"
   add_foreign_key "models", "categories"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "products"
   add_foreign_key "products", "models"
 end
