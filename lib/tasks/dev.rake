@@ -1,6 +1,37 @@
 namespace :dev do
   desc "Configura ambiente de desenvolvimento"
   task setup: :environment do
+    puts "Creating users"
+    10.times do |i|
+      attributes = {
+        "name": Faker::Name.unique.clear,
+        "email": Faker::Internet.unique.email,
+        "password": "123456",
+        "genre": ["M", "F", "O"].sample
+      }
+      user = User.new(attributes)
+      user.skip_confirmation!
+      user.save!
+    end
+    puts "Finished creating users"
+    puts "Adding addresses for users"
+    User.all.each do |user|
+      Random.rand(5).times do |i|
+        address = Address.create(
+          cep: Faker::Address.zip_code,
+          street: Faker::Address.street_name,
+          number: Faker::Address.building_number,
+          complement: Faker::Address.secondary_address,
+          neighbourhood: Faker::Address.community,
+          city: Faker::Address.city,
+          state: Faker::Address.state,
+          phone: Faker::PhoneNumber.cell_phone
+        )
+        user.addresses << address
+        user.save!
+      end
+    end
+    puts "Finished adding addresses"  
     puts "Creating categories"
     5.times do |i|
       Category.create!(
@@ -55,7 +86,8 @@ namespace :dev do
         status: [0, 1, 2].sample,
         discount: rand(20..40),
         coupon: 'code',
-        total: Faker::Number.decimal(l_digits: 2)
+        total: Faker::Number.decimal(l_digits: 2),
+        user: User.all.sample
       )
     end
     puts "Finished creating orders"
