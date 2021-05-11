@@ -33,14 +33,14 @@ namespace :dev do
     end
     puts "Finished adding addresses"  
     puts "Creating categories"
-    5.times do |i|
+    [0, 1, 2].each do |i|
       Category.create!(
-        name: "Category #{i}"
+        name: i
       )
     end
     puts "Finished creating cattegories"
     puts "Creating Models"
-    3.times do |i|
+    5.times do |i|
       Model.create!(
         name: "Model #{i}",
         ref: Faker::Alphanumeric.alpha(number: 10),

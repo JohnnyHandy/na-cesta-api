@@ -3,8 +3,10 @@ class ModelsController < ApplicationController
 
   # GET /models
   def index
-    @models = Model.all
-
+   
+    @q = Model.ransack(params[:q])
+    puts params[:q]
+    @models = @q.result
     render json: @models
   end
 
