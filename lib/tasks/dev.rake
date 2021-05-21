@@ -16,7 +16,7 @@ namespace :dev do
     puts "Finished creating users"
     puts "Adding addresses for users"
     User.all.each do |user|
-      Random.rand(5).times do |i|
+      rand(1..5).times do |i|
         address = Address.create(
           cep: Faker::Address.zip_code,
           street: Faker::Address.street_name,
@@ -68,12 +68,13 @@ namespace :dev do
     puts "Finished creating products"
     puts "Creating Images"
     imagesArray = [
-      'https://images.pexels.com/photos/3488543/pexels-photo-3488543.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      'https://images.pexels.com/photos/789555/pexels-photo-789555.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      'https://images.pexels.com/photos/343701/pexels-photo-343701.jpeg?cs=srgb&dl=pexels-curioso-photography-343701.jpg&fm=jpg',
+      'https://via.placeholder.com/150',
+      'https://via.placeholder.com/150',
+      'https://via.placeholder.com/150'
+
     ]
     Product.all.each do |product|
-      Random.rand(5).times do |i|
+      rand(1..6).times do |i|
         image = Image.create(key: imagesArray.sample)
         product.images << image
         product.save!
@@ -93,7 +94,7 @@ namespace :dev do
     puts "Finished creating orders"
     puts "Creating order_items"
     Order.all.each do |order|
-      Random.rand(5).times do |i|
+      rand(1..5).times do |i|
         product = Product.all.sample
         quantity = rand(1..5)
         productPrice = product.discount > 0 ? product.price * (product.discount/100) : product.is_deal ? product.deal_price : product.price

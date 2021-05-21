@@ -3,9 +3,11 @@ class ProductsController < ApplicationController
 
   # GET /products
   def index
-    @products = Product.all
+    @products = params[:model_id] ?
+      Product.where(model_id: params[:model_id]) :
+       Product.all
 
-    render json: @products
+    render json: @products, include: [:images]
   end
 
   # GET /products/1
