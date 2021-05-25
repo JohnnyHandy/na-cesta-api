@@ -59,7 +59,6 @@ class OrdersController < ApplicationController
           :discount,
           :price,
           :deal_price,
-          :images,
           :size,
           :product_id,
           :quantity,

@@ -1,6 +1,16 @@
 namespace :dev do
   desc "Configura ambiente de desenvolvimento"
+  # def purge_attachments
+  #   attachments = ActiveStorage::Attachment.all
+  #   attachments.each { |attachment| attachment.purge } if attachments.length > 0
+  # end
+  task purge_files: :environment do
+    puts "Purging files"
+    attachments = ActiveStorage::Attachment.all
+    attachments.each { |attachment| attachment.purge } if attachments.length > 0
+  end
   task setup: :environment do
+    # purge_attachments
     puts "Creating users"
     10.times do |i|
       attributes = {
@@ -16,7 +26,7 @@ namespace :dev do
     puts "Finished creating users"
     puts "Adding addresses for users"
     User.all.each do |user|
-      rand(1..5).times do |i|
+      rand(1..3).times do |i|
         address = Address.create(
           cep: Faker::Address.zip_code,
           street: Faker::Address.street_name,
@@ -67,16 +77,24 @@ namespace :dev do
     end
     puts "Finished creating products"
     puts "Creating Images"
-    imagesArray = [
-      'https://via.placeholder.com/150',
-      'https://via.placeholder.com/150',
-      'https://via.placeholder.com/150'
-
-    ]
+    images = Dir.glob(Rails.root.join('assets', '*.{jpg,gif,png}'))
+    
+    # imagesArray = [
+    #   'https://via.placeholder.com/150',
+    #   'https://via.placeholder.com/150',
+    #   'https://via.placeholder.com/150'
+    # ]
     Product.all.each do |product|
-      rand(1..6).times do |i|
-        image = Image.create(key: imagesArray.sample)
-        product.images << image
+      rand(1..3).times do |i|
+        path = images.sample
+        File.open(path) do |file|
+          product.images.attach(
+            key: "/images/#{Faker::Alphanumeric.alpha(number: 4)}-#{File.basename(path)}",
+            io: file,
+            filename: File.basename(path),
+            content_type: 'image/jpeg'
+          )
+        end
         product.save!
       end  
     end

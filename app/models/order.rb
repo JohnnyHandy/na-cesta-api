@@ -3,7 +3,4 @@ class Order < ApplicationRecord
   has_many :products, :through => :order_items
   belongs_to :user
   accepts_nested_attributes_for :order_items
-  def as_json(options = {})
-    super(include: { order_items: { include: :images } })
-  end
 end
