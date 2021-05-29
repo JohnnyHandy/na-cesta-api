@@ -7,7 +7,7 @@ class ProductsController < ApplicationController
       Product.where(model_id: params[:model_id]) :
        Product.all
 
-    render json: @products
+    render json: @products, methods: :image_url
   end
 
   # GET /products/1

@@ -6,7 +6,6 @@ class Product < ApplicationRecord
     if self.images.attached?
       puts self.images
       self.images.map do |image|
-        puts image.methods
         {
           id: image.id,
           filename: image.filename.to_s,

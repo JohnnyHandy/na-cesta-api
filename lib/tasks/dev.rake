@@ -91,7 +91,7 @@ namespace :dev do
           product.images.attach(
             key: "/images/#{Faker::Alphanumeric.alpha(number: 4)}-#{File.basename(path)}",
             io: file,
-            filename: File.basename(path),
+            filename: "#{i}-#{File.basename(path)}",
             content_type: 'image/jpeg'
           )
         end
