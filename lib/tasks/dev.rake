@@ -14,7 +14,7 @@ namespace :dev do
     puts "Creating users"
     10.times do |i|
       attributes = {
-        "name": Faker::Name.unique.clear,
+        "name": Faker::Name.name,
         "email": Faker::Internet.unique.email,
         "password": "123456",
         "genre": ["M", "F", "O"].sample
@@ -101,17 +101,20 @@ namespace :dev do
     puts "Finished creating images"
     puts "Creating orders"
     5.times do |i|
+      user = User.all.sample
       Order.create!(
         status: [0, 1, 2].sample,
         discount: rand(20..40),
         coupon: 'code',
-        total: Faker::Number.decimal(l_digits: 2),
-        user: User.all.sample
+        total: 0,
+        user: user,
+        address: user.addresses.sample
       )
     end
     puts "Finished creating orders"
     puts "Creating order_items"
     Order.all.each do |order|
+      totalPrice = 0
       rand(1..5).times do |i|
         product = Product.all.sample
         quantity = rand(1..5)
@@ -130,9 +133,12 @@ namespace :dev do
           order: Order.all.sample,
           subtotal: productPrice * quantity
         )
+        totalPrice = totalPrice + (quantity * productPrice)
         order.order_items << order_item
         order.save!
-      end  
+      end
+      order.total = totalPrice
+      order.save!
     end
     puts "Finished creating order_items"
   end

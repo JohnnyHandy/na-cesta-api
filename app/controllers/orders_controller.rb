@@ -5,12 +5,12 @@ class OrdersController < ApplicationController
   def index
     @orders = Order.all
 
-    render json: @orders
+    render json: @orders, only: [:id, :created_at, :status], :include => {:user => {:only => :name}}
   end
 
   # GET /orders/1
   def show
-    render json: @order
+    render json: @order, include: [:order_items, :user, :address]
   end
 
   # POST /orders
