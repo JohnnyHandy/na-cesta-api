@@ -17,7 +17,22 @@ namespace :dev do
         "name": Faker::Name.name,
         "email": Faker::Internet.unique.email,
         "password": "123456",
-        "genre": ["M", "F", "O"].sample
+        "genre": ["M", "F", "O"].sample,
+       "phone": Faker::PhoneNumber.cell_phone
+
+      }
+      user = User.new(attributes)
+      user.skip_confirmation!
+      user.save!
+    end
+    1.times do |i|
+      attributes = {
+        "name": 'Admin',
+        "email": 'admin@admin.com',
+        "password": "123456",
+        "genre": ["M", "F", "O"].sample,
+        "phone": Faker::PhoneNumber.cell_phone,
+         "admin": true
       }
       user = User.new(attributes)
       user.skip_confirmation!
@@ -25,7 +40,7 @@ namespace :dev do
     end
     puts "Finished creating users"
     puts "Adding addresses for users"
-    User.all.each do |user|
+    User.all.where('admin': nil).each do |user|
       rand(1..3).times do |i|
         address = Address.create(
           cep: Faker::Address.zip_code,
@@ -35,7 +50,6 @@ namespace :dev do
           neighbourhood: Faker::Address.community,
           city: Faker::Address.city,
           state: Faker::Address.state,
-          phone: Faker::PhoneNumber.cell_phone
         )
         user.addresses << address
         user.save!
@@ -43,7 +57,7 @@ namespace :dev do
     end
     puts "Finished adding addresses"  
     puts "Creating categories"
-    [0, 1, 2].each do |i|
+    [1, 2, 3].each do |i|
       Category.create!(
         name: i
       )
@@ -101,7 +115,7 @@ namespace :dev do
     puts "Finished creating images"
     puts "Creating orders"
     5.times do |i|
-      user = User.all.sample
+      user =  User.all.where('admin': nil).sample
       Order.create!(
         status: [0, 1, 2].sample,
         discount: rand(20..40),

@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(version: 2021_06_01_204537) do
     t.string "neighbourhood", null: false
     t.string "city", null: false
     t.string "state", null: false
-    t.string "phone", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -140,6 +139,7 @@ ActiveRecord::Schema.define(version: 2021_06_01_204537) do
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
     t.string "name"
+    t.string "phone"
     t.string "nickname"
     t.string "image"
     t.string "email", default: "", null: false
