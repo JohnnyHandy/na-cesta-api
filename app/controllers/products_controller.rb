@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  before_action :authenticate_user!, only: [:create, :update, :destroy, :update_filename, :purge_image]
   before_action :set_product, only: [:show, :update, :destroy]
 
   # GET /products

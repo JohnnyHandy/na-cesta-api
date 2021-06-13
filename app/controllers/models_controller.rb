@@ -1,4 +1,5 @@
 class ModelsController < ApplicationController
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
   before_action :set_model, only: [:show, :update, :destroy]
 
   # GET /models
