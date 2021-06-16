@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_01_204537) do
+ActiveRecord::Schema.define(version: 2021_06_14_200815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,12 @@ ActiveRecord::Schema.define(version: 2021_06_01_204537) do
   create_table "models", force: :cascade do |t|
     t.string "ref"
     t.string "name"
+    t.text "description"
+    t.boolean "is_deal"
+    t.integer "discount"
+    t.decimal "price", precision: 6, scale: 2
+    t.decimal "deal_price", precision: 6, scale: 2
+    t.boolean "enabled"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "category_id"
@@ -106,19 +112,27 @@ ActiveRecord::Schema.define(version: 2021_06_01_204537) do
 
   create_table "products", force: :cascade do |t|
     t.string "name"
+    t.string "ref"
     t.string "color"
-    t.string "size"
     t.text "description"
     t.boolean "is_deal"
     t.integer "discount"
     t.decimal "price", precision: 6, scale: 2
     t.decimal "deal_price", precision: 6, scale: 2
-    t.integer "in_stock"
     t.boolean "enabled"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "model_id", null: false
     t.index ["model_id"], name: "index_products_on_model_id"
+  end
+
+  create_table "stocks", force: :cascade do |t|
+    t.string "size"
+    t.integer "quantity"
+    t.bigint "product_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_stocks_on_product_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -163,4 +177,5 @@ ActiveRecord::Schema.define(version: 2021_06_01_204537) do
   add_foreign_key "orders", "addresses"
   add_foreign_key "orders", "users"
   add_foreign_key "products", "models"
+  add_foreign_key "stocks", "products"
 end

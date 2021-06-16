@@ -68,28 +68,46 @@ namespace :dev do
       Model.create!(
         name: "Model #{i}",
         ref: Faker::Alphanumeric.alpha(number: 10),
-        category: Category.all.sample
-      )
-    end
-    puts "Finished creating models"
-    puts "Creating products"
-    sizes = ['S', 'M', 'G']
-    15.times do |i|
-      Product.create!(
-        name: "Product #{i}",
-        color: Faker::Color.hex_color,
-        size: sizes.sample,
-        model: Model.all.sample,
+        category: Category.all.sample,
         description: "Description text #{i}",
         is_deal: [true,false].sample,
         discount: [0, rand(10..40)].sample,
         price: Faker::Number.decimal(l_digits: 2),
         deal_price: Faker::Number.decimal(l_digits: 2) ,
-        in_stock: rand(0..30),
         enabled: [true,false].sample
       )
     end
+    puts "Finished creating models"
+    puts "Creating products"
+    15.times do |i|
+      model = Model.all.sample
+      mirrorModel = [true, false].sample
+      Product.create!(
+        name: "Product #{i}",
+        ref: Faker::Alphanumeric.alpha(number: 10),
+        color: Faker::Color.hex_color,
+        model: model,
+        description: mirrorModel ? model.description : ["Product #{i} description", nil],
+        is_deal: mirrorModel ? model.is_deal : [true,false, nil].sample,
+        discount: mirrorModel ? model.discount : [0, rand(10..40), nil].sample,
+        price: mirrorModel ? model.price : [Faker::Number.decimal(l_digits: 2), nil].sample,
+        deal_price: mirrorModel ? model.deal_price : [Faker::Number.decimal(l_digits: 2), nil].sample ,
+        enabled: mirrorModel ? model.enabled : [true,false, nil].sample
+      )
+    end
     puts "Finished creating products"
+    puts "Creating Stocks"
+    Product.all.each do |product|
+      sizes = ['S', 'M', 'G']
+      sizes.sample(rand(1..3)).each do |size|
+        Stock.create!(
+          product: product,
+          quantity: rand(0...30),
+          size: size
+        )
+      end
+    end
+    puts "Ended creating stocks"
     puts "Creating Images"
     images = Dir.glob(Rails.root.join('assets', '*.{jpg,gif,png}'))
     
@@ -99,6 +117,14 @@ namespace :dev do
     #   'https://via.placeholder.com/150'
     # ]
     Product.all.each do |product|
+      category = product.model.category.name
+      if category === 'biquini'
+        images = Dir.glob(Rails.root.join('assets','biquini', '*.{jpg,gif,png}'))
+      elsif category === 'maio'
+        images = Dir.glob(Rails.root.join('assets','maio', '*.{jpg,gif,png}'))
+      elsif category === 'saida'
+        images = Dir.glob(Rails.root.join('assets','saida', '*.{jpg,gif,png}'))
+      end
       rand(1..3).times do |i|
         path = images.sample
         File.open(path) do |file|
@@ -132,12 +158,12 @@ namespace :dev do
       rand(1..5).times do |i|
         product = Product.all.sample
         quantity = rand(1..5)
-        productPrice = product.discount > 0 ? product.price * (product.discount/100) : product.is_deal ? product.deal_price : product.price
+        productPrice = (product.discount != nil && product.discount > 0 && product.price != nil) ? product.price * (product.discount/100) : product.is_deal ? product.deal_price : (product.price != nil) ? product.price : product.model.price
         order_item = OrderItem.create!(
           name: product.name,
           product_id: product.id,
           color: product.color,
-          size: product.size,
+          size: product.stocks.sample.size,
           description: product.description,
           is_deal: product.is_deal,
           discount: product.discount,

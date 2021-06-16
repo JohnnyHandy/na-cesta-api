@@ -8,12 +8,12 @@ class ProductsController < ApplicationController
       Product.where(model_id: params[:model_id]) :
        Product.all
 
-    render json: @products, methods: :image_url
+    render json: @products, include: [:stocks], methods: :image_url
   end
 
   # GET /products/1
   def show
-    render json: @product, methods: :image_url
+    render json: @product, include: [:stocks], methods: :image_url
   end
 
   # POST /products
@@ -60,6 +60,24 @@ class ProductsController < ApplicationController
     head :created
   end
 
+#PATCH /stocks/1/image/1
+  def update_stock
+    product = Product.find(params[:product_id])
+    stock = product.stocks.find(params[:stock_id])
+    stock.update!(stock_params)
+    render json: {
+      id: stock.id,
+      size: stock.size,
+      quantity: stock.quantity
+    }
+  end
+# DELETE /products/1/image/1
+  def purge_stock
+    product = Product.find(params[:product_id])
+    product.stocks.find(params[:stock_id]).destroy
+    head :no_content
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -69,6 +87,26 @@ class ProductsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def product_params
-      params.permit(:name, :color, :size, :description, :is_deal, :discount, :price, :deal_price, :in_stock, :enabled, :model_id, :filename, images:[])
+      params.permit(
+        :name,
+        :ref,
+        :color,
+        :description,
+        :is_deal,
+        :discount,
+        :price,
+        :deal_price,
+        :enabled,
+        :model_id,
+        stocks_attributes: [
+          :size,
+          :quantity
+        ],
+        images:[]
+      )
+    end
+
+    def stock_params
+      params.permit(:size, :quantity)
     end
 end

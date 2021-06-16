@@ -49,6 +49,16 @@ class ModelsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def model_params
-      params.require(:model).permit(:ref, :name, :category_id)
+      params.require(:model).permit(
+        :ref,
+        :name,
+        :category_id,
+        :description,
+        :is_deal,
+        :discount,
+        :price,
+        :deal_price,
+        :enabled,
+      )
     end
 end

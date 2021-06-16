@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   resources :products do
     patch "image/:image_id", to: "products#update_filename"
     delete "image/:image_id", to: "products#purge_image"
+
+    patch "stock/:stock_id", to: "products#update_stock"
+    delete "stock/:stock_id", to: "products#purge_stock"
   end
   resources :users
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
