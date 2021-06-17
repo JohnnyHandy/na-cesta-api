@@ -79,7 +79,7 @@ namespace :dev do
     end
     puts "Finished creating models"
     puts "Creating products"
-    15.times do |i|
+    40.times do |i|
       model = Model.all.sample
       mirrorModel = [true, false].sample
       Product.create!(
@@ -158,7 +158,7 @@ namespace :dev do
       rand(1..5).times do |i|
         product = Product.all.sample
         quantity = rand(1..5)
-        productPrice = (product.discount != nil && product.discount > 0 && product.price != nil) ? product.price * (product.discount/100) : product.is_deal ? product.deal_price : (product.price != nil) ? product.price : product.model.price
+        productPrice = (product.discount != nil && product.discount > 0 && product.price != nil) ? product.price * (product.discount/100) : (product.is_deal && product.deal_price != nil) ? product.deal_price : (product.price != nil) ? product.price : product.model.price
         order_item = OrderItem.create!(
           name: product.name,
           product_id: product.id,
