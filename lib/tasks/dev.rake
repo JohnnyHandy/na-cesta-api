@@ -64,7 +64,9 @@ namespace :dev do
     end
     puts "Finished creating cattegories"
     puts "Creating Models"
-    5.times do |i|
+    24.times do |i|
+      modelPrice = Faker::Number.decimal(l_digits: 2)
+      modelDealPrice = rand(modelPrice * (0.1)... modelPrice)
       Model.create!(
         name: "Model #{i}",
         ref: Faker::Alphanumeric.alpha(number: 10),
@@ -72,28 +74,31 @@ namespace :dev do
         description: "Description text #{i}",
         is_deal: [true,false].sample,
         discount: [0, rand(10..40)].sample,
-        price: Faker::Number.decimal(l_digits: 2),
-        deal_price: Faker::Number.decimal(l_digits: 2) ,
+        price: modelPrice,
+        deal_price: modelDealPrice,
         enabled: [true,false].sample
       )
     end
     puts "Finished creating models"
     puts "Creating products"
-    40.times do |i|
-      model = Model.all.sample
-      mirrorModel = [true, false].sample
-      Product.create!(
-        name: "Product #{i}",
-        ref: Faker::Alphanumeric.alpha(number: 10),
-        color: Faker::Color.hex_color,
-        model: model,
-        description: mirrorModel ? model.description : ["Product #{i} description", nil],
-        is_deal: mirrorModel ? model.is_deal : [true,false, nil].sample,
-        discount: mirrorModel ? model.discount : [0, rand(10..40), nil].sample,
-        price: mirrorModel ? model.price : [Faker::Number.decimal(l_digits: 2), nil].sample,
-        deal_price: mirrorModel ? model.deal_price : [Faker::Number.decimal(l_digits: 2), nil].sample ,
-        enabled: mirrorModel ? model.enabled : [true,false, nil].sample
-      )
+    Model.all.each do |model|
+      rand(3...8).times do |i|
+        nilProductInfo = [true, false].sample
+        productPrice = Faker::Number.decimal(l_digits: 2)
+        productDealPrice = rand(productPrice * 0.1...productPrice)
+        Product.create!(
+          name: "Product #{i}",
+          ref: Faker::Alphanumeric.alpha(number: 10),
+          color: Faker::Color.hex_color,
+          model: model,
+          description: nilProductInfo ? nil : "Product #{i} description",
+          is_deal: nilProductInfo ? nil : [true,false].sample,
+          discount: nilProductInfo ? nil : [0, rand(10..40)].sample,
+          price: nilProductInfo ? nil : productPrice,
+          deal_price: nilProductInfo ? nil : productDealPrice ,
+          enabled: nilProductInfo ? nil : [true,false].sample
+        )
+      end  
     end
     puts "Finished creating products"
     puts "Creating Stocks"
