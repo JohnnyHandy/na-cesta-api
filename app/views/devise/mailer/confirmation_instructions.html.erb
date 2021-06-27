@@ -1,0 +1,8 @@
+<div style="display: flex; flex-direction: column; width: 100%; height: 100%">
+  <%= image_tag('https://i.imgur.com/J83z7AU.png',alt:'Use Verano', style: 'margin: 0 auto; max-width: 25vw') %>
+  <h2 style="margin: 0 auto;" >Bem vindo! <%= @email %>!</h2>
+
+  <p style="margin: 1em auto;">Confirme o seu endereço de email no link abaixo:</p>
+
+  <p style="margin: 0 auto;"><%= link_to 'Confirmar conta', confirmation_url(@resource, confirmation_token: @token) %></p>
+</div>

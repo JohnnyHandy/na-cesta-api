@@ -23,7 +23,7 @@ Rails.application.configure do
     }
   else
   Rails.application.configure do
-    config.action_mailer.default_url_options = { host: 'localhost' }
+    config.action_mailer.default_url_options = { host: 'localhost', port: 8000 }
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
   end
@@ -31,7 +31,7 @@ Rails.application.configure do
 
     config.cache_store = :null_store
   end
-
+  config.action_mailer.preview_path = "#{Rails.root}/app/views/devise/mailer_previews"
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
