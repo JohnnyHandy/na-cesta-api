@@ -17,8 +17,10 @@ namespace :dev do
         "name": Faker::Name.name,
         "email": Faker::Internet.unique.email,
         "password": "123456",
-        "genre": ["M", "F", "O"].sample,
-       "phone": Faker::PhoneNumber.cell_phone
+        "gender": ["M", "F", "O"].sample,
+       "phone": Faker::PhoneNumber.cell_phone,
+       "document": Faker::Number.number(digits: 11),
+       "birthday": Faker::Date.between(from: '1980-09-23', to: '2014-09-25')
 
       }
       user = User.new(attributes)
@@ -30,9 +32,11 @@ namespace :dev do
         "name": 'Admin',
         "email": 'admin@admin.com',
         "password": "123456",
-        "genre": ["M", "F", "O"].sample,
+        "gender": ["M", "F", "O"].sample,
         "phone": Faker::PhoneNumber.cell_phone,
-         "admin": true
+         "admin": true,
+         "document": Faker::Number.number(digits: 11),
+         "birthday": Faker::Date.between(from: '1980-09-23', to: '2014-09-25')
       }
       user = User.new(attributes)
       user.skip_confirmation!
