@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   resources :addresses
   get 'users/index'
-  mount_devise_token_auth_for 'User', at: 'auth'
+  mount_devise_token_auth_for 'User', at: 'auth',
+  controllers: {
+    registrations: 'users/registrations'
+  }
   resources :orders
   resources :categories
   resources :models do
@@ -15,5 +18,6 @@ Rails.application.routes.draw do
     delete "stock/:stock_id", to: "products#purge_stock"
   end
   resources :users
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

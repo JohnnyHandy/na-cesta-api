@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2021_06_14_200815) do
     t.string "cep", null: false
     t.string "street", null: false
     t.string "number", null: false
-    t.string "complement", null: false
+    t.string "complement"
     t.string "neighbourhood", null: false
     t.string "city", null: false
     t.string "state", null: false

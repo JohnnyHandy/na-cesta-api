@@ -4,7 +4,7 @@ class CreateAddresses < ActiveRecord::Migration[6.1]
       t.string :cep, null: false
       t.string :street, null: false
       t.string :number, null: false
-      t.string :complement, null: false
+      t.string :complement
       t.string :neighbourhood, null: false
       t.string :city, null: false
       t.string :state, null: false
