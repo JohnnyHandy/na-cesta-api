@@ -1,0 +1,12 @@
+pt:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: 'O e-mail já está sendo utilizado.'
+            document:
+              taken: 'O documento já está sendo utilizado.'
+            current_password:
+              invalid: 'A senha atual inserida é invalida.'
