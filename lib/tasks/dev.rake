@@ -167,7 +167,11 @@ namespace :dev do
       rand(1..5).times do |i|
         product = Product.all.sample
         quantity = rand(1..5)
-        productPrice = (product.discount != nil && product.discount > 0 && product.price != nil) ? product.price * (product.discount/100) : (product.is_deal && product.deal_price != nil) ? product.deal_price : (product.price != nil) ? product.price : product.model.price
+        discount = product.discount || product.model.discount
+        is_deal = product.is_deal || product.model.is_deal
+        deal_price = product.deal_price || product.model.deal_price
+        price = product.price || product.model.price
+        productPrice = (is_deal && deal_price != nil) ? deal_price : (discount != nil && discount > 0 && price != nil)? (price - (price * discount/100)) : price
         order_item = OrderItem.create!(
           name: product.name,
           product_id: product.id,
