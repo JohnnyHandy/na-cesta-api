@@ -6,7 +6,7 @@ class OrdersController < ApplicationController
   def index
     @orders = Order.all
 
-    render json: @orders, only: [:id, :created_at, :status], :include => {:user => {:only => :name}}
+    render json: @orders, only: [:id, :created_at, :status, :ref], :include => {:user => {:only => :name}}
   end
 
   # GET /orders/1

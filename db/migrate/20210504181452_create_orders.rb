@@ -4,8 +4,8 @@ class CreateOrders < ActiveRecord::Migration[6.1]
       t.integer :status
       t.integer :discount
       t.string :coupon
+      t.string :ref
       t.decimal :total, precision: 6, scale: 2
-
       t.timestamps
     end
   end

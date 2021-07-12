@@ -154,6 +154,7 @@ namespace :dev do
       Order.create!(
         status: [0, 1, 2].sample,
         discount: rand(20..40),
+        ref: Faker::Alphanumeric.alpha(number: 10),
         coupon: 'code',
         total: 0,
         user: user,

@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 2021_06_14_200815) do
     t.integer "status"
     t.integer "discount"
     t.string "coupon"
+    t.string "ref"
     t.decimal "total", precision: 6, scale: 2
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
