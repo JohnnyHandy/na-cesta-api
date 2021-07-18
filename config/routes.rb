@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     delete "stock/:stock_id", to: "products#purge_stock"
   end
   resources :users
+  resources :payment_intent
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

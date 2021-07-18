@@ -1,4 +1,6 @@
+
 namespace :dev do
+  Faker::Config.locale = 'pt-BR'
   desc "Configura ambiente de desenvolvimento"
   # def purge_attachments
   #   attachments = ActiveStorage::Attachment.all
@@ -35,7 +37,7 @@ namespace :dev do
         "gender": ["M", "F", "O"].sample,
         "phone": Faker::PhoneNumber.cell_phone,
          "admin": true,
-         "document": Faker::Number.number(digits: 11),
+         "document": CPF.generate,
          "birthday": Faker::Date.between(from: '1980-09-23', to: '2014-09-25')
       }
       user = User.new(attributes)

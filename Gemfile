@@ -46,3 +46,5 @@ gem "devise", "~> 4.8"
 gem "devise_token_auth", "~> 1.1"
 
 gem "ransack", "~> 2.4"
+gem 'stripe'
+gem "cpf_cnpj"
