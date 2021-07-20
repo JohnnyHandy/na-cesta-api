@@ -70,7 +70,7 @@ namespace :dev do
     end
     puts "Finished creating cattegories"
     puts "Creating Models"
-    29.times do |i|
+    30.times do |i|
       modelPrice = Faker::Number.decimal(l_digits: 2)
       modelDealPrice = rand(modelPrice * (0.1)... modelPrice)
       Model.create!(
@@ -89,7 +89,7 @@ namespace :dev do
     puts "Finished creating models"
     puts "Creating products"
     Model.all.each do |model|
-      rand(3...8).times do |i|
+      rand(3...5).times do |i|
         nilProductInfo = [true, false].sample
         productPrice = Faker::Number.decimal(l_digits: 2)
         productDealPrice = rand(productPrice * 0.1...productPrice)

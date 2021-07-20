@@ -6,7 +6,6 @@ class ModelsController < ApplicationController
   def index
    
     @q = Model.ransack(params[:q])
-    puts params[:q]
     @models = @q.result
     render json: @models
   end
@@ -56,6 +55,7 @@ class ModelsController < ApplicationController
         :description,
         :is_deal,
         :discount,
+        :team,
         :price,
         :deal_price,
         :enabled,
