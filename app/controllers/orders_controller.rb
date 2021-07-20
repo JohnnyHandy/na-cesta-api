@@ -19,6 +19,11 @@ class OrdersController < ApplicationController
     @order = Order.new(order_params)
 
     if @order.save
+      puts @order
+      if @order[:payment_method] === 'boleto'
+        puts 'This is a boleto'
+        OrdersMailer.boleto_email(@order, current_user).deliver
+      end
       render json: @order, status: :created, location: @order
     else
       render json: @order.errors, status: :unprocessable_entity
@@ -52,6 +57,15 @@ class OrdersController < ApplicationController
         :discount,
         :coupon,
         :total,
+        :payment_type,
+        :payment_id,
+        :payment_method,
+        :payment_status,
+        :tracking_code,
+        :ref,
+        :user_id,
+        :address_id,
+        :boleto_pdf,
         order_items_attributes: [
           :name,
           :description,

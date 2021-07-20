@@ -3,10 +3,8 @@ class PaymentIntentController < ApplicationController
   end
 
   def create
-    puts JSON.parse(payment_intent_params.to_json)
-    payment_intent = Stripe::PaymentIntent.create(
-      JSON.parse(payment_intent_params.to_json)
-    )
+    parsed_params = JSON.parse(payment_intent_params.to_json)
+    payment_intent = Stripe::PaymentIntent.create(parsed_params)
     render json: payment_intent
   end
   private
@@ -20,6 +18,7 @@ class PaymentIntentController < ApplicationController
       :payment_intent,
       :confirm,
       :id,
+      :receipt_email,
       :payment_method_types => []
     )
   end

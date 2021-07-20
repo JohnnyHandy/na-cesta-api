@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 2021_06_14_200815) do
     t.text "description"
     t.boolean "is_deal"
     t.integer "discount"
+    t.integer "team"
     t.decimal "price", precision: 6, scale: 2
     t.decimal "deal_price", precision: 6, scale: 2
     t.boolean "enabled"
@@ -102,6 +103,11 @@ ActiveRecord::Schema.define(version: 2021_06_14_200815) do
     t.integer "discount"
     t.string "coupon"
     t.string "ref"
+    t.string "tracking_code"
+    t.string "payment_id"
+    t.integer "payment_method"
+    t.integer "payment_status"
+    t.string "boleto_pdf"
     t.decimal "total", precision: 6, scale: 2
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

@@ -1,0 +1,7 @@
+<div style="display: flex; flex-direction: column; width: 100%; height: 100%">
+  <%= image_tag(@logo_url, alt:'Na cesta', style: 'margin: 0 auto; max-width: 25vw') %>
+  <h2 style="margin: 0 auto;" > Falta pouco pra concluir o seu pedido <%= @email %>!</h2>
+  <p style="margin: 1em auto;"> Faça o download do boleto através do link abaixo: </p>
+
+  <p style="margin: 0 auto;"><%= link_to 'Boleto de pagamento', @boleto_url %></p>
+</div>

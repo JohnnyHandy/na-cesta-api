@@ -1,4 +1,4 @@
 class Category < ApplicationRecord
-  enum name: { biquini: 1, maio: 2, saida: 3 }
+  enum name: { regata: 0, shorts: 1, kit: 2, tenis: 3 }
   has_many :models
 end

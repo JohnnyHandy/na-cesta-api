@@ -6,10 +6,10 @@ class CreateModels < ActiveRecord::Migration[6.1]
       t.text :description
       t.boolean :is_deal
       t.integer :discount
+      t.integer :team
       t.decimal :price, precision: 6, scale: 2
       t.decimal :deal_price, precision: 6, scale: 2
       t.boolean :enabled
-
       t.timestamps
     end
   end

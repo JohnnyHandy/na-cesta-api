@@ -63,14 +63,14 @@ namespace :dev do
     end
     puts "Finished adding addresses"  
     puts "Creating categories"
-    [1, 2, 3].each do |i|
+    [0, 1, 2, 3].each do |i|
       Category.create!(
         name: i
       )
     end
     puts "Finished creating cattegories"
     puts "Creating Models"
-    24.times do |i|
+    29.times do |i|
       modelPrice = Faker::Number.decimal(l_digits: 2)
       modelDealPrice = rand(modelPrice * (0.1)... modelPrice)
       Model.create!(
@@ -79,6 +79,7 @@ namespace :dev do
         category: Category.all.sample,
         description: "Description text #{i}",
         is_deal: [true,false].sample,
+        team: i,
         discount: [0, rand(10..40)].sample,
         price: modelPrice,
         deal_price: modelDealPrice,
@@ -119,22 +120,21 @@ namespace :dev do
       end
     end
     puts "Ended creating stocks"
-    puts "Creating Images"
-    images = Dir.glob(Rails.root.join('assets', '*.{jpg,gif,png}'))
-    
-    # imagesArray = [
-    #   'https://via.placeholder.com/150',
-    #   'https://via.placeholder.com/150',
-    #   'https://via.placeholder.com/150'
-    # ]
+    puts "Creating Images"    
     Product.all.each do |product|
       category = product.model.category.name
-      if category === 'biquini'
-        images = Dir.glob(Rails.root.join('assets','biquini', '*.{jpg,gif,png}'))
-      elsif category === 'maio'
-        images = Dir.glob(Rails.root.join('assets','maio', '*.{jpg,gif,png}'))
-      elsif category === 'saida'
-        images = Dir.glob(Rails.root.join('assets','saida', '*.{jpg,gif,png}'))
+      if category === 'regata'
+        puts 'regata'
+        images = Dir.glob(Rails.root.join('assets','regata', '*.{jpg,gif,png}'))
+      elsif category === 'shorts'
+        puts 'shorts'
+        images = Dir.glob(Rails.root.join('assets','shorts', '*.{jpg,gif,png}'))
+      elsif category === 'tenis'
+        puts 'tenis'
+        images = Dir.glob(Rails.root.join('assets','tenis', '*.{jpg,gif,png}'))
+      elsif category === 'kit'
+        puts 'kit'
+        images = Dir.glob(Rails.root.join('assets','kits', '*.{jpg,gif,png}'))
       end
       rand(1..3).times do |i|
         path = images.sample
@@ -154,10 +154,13 @@ namespace :dev do
     5.times do |i|
       user =  User.all.where('admin': nil).sample
       Order.create!(
-        status: [0, 1, 2].sample,
+        status: [0, 1, 2, 3].sample,
+        payment_status: [0, 1].sample,
+        payment_method: [0, 1].sample,
+        boleto_pdf: '',
         discount: rand(20..40),
         ref: Faker::Alphanumeric.alpha(number: 10),
-        coupon: 'code',
+        coupon: nil,
         total: 0,
         user: user,
         address: user.addresses.sample
