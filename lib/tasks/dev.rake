@@ -1,6 +1,5 @@
 
 namespace :dev do
-  Faker::Config.locale = 'pt-BR'
   desc "Configura ambiente de desenvolvimento"
   # def purge_attachments
   #   attachments = ActiveStorage::Attachment.all
