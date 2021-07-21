@@ -1,5 +1,4 @@
 class OrdersMailer < ApplicationMailer
-  default from: 'pagamentos@nacesta.com'
 
   def boleto_email(params, user)
     @user = user
