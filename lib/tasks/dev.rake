@@ -1,5 +1,6 @@
 namespace :prod do
-  task :setup :environment do
+  desc "Configura ambiente de produção"
+  task setup: :environment do
     puts "Creating users"
     1.times do |i|
       attributes = {
@@ -24,7 +25,6 @@ namespace :prod do
       )
     end
     puts "Finished creating cattegories"
-
   end
 end
 
