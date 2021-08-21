@@ -1,6 +1,23 @@
-namespace :prod do
-  desc "Configura ambiente de produção"
+
+namespace :dev do
+  Faker::Config.locale = 'pt-BR'
+  desc "Configura ambiente de desenvolvimento"
+  def purge_attachments
+    attachments = ActiveStorage::Attachment.all
+    attachments.each { |attachment| attachment.purge } if attachments.length > 0
+  end
+  task purge_files: :environment do
+    puts "Purging files"
+    attachments = ActiveStorage::Attachment.all
+    attachments.each { |attachment| attachment.purge } if attachments.length > 0
+  end
+  desc "Configura ambiente de desenvolvimento"
+  # def purge_attachments
+  #   attachments = ActiveStorage::Attachment.all
+  #   attachments.each { |attachment| attachment.purge } if attachments.length > 0
+  # end
   task setup: :environment do
+    # purge_attachments
     puts "Creating users"
     1.times do |i|
       attributes = {
@@ -9,66 +26,9 @@ namespace :prod do
         "password": "123456",
         "gender": ["M", "F", "O"].sample,
         "phone": '83999999999',
-        "admin": true,
-        "document": CPF.generate,
-        "birthday": Time.now
-      }
-      user = User.new(attributes)
-      user.skip_confirmation!
-      user.save!
-    end
-    puts "Finished creating users"
-    puts "Creating categories"
-    [0, 1, 2, 3].each do |i|
-      Category.create!(
-        name: i
-      )
-    end
-    puts "Finished creating cattegories"
-  end
-end
-
-
-namespace :dev do
-  Faker::Config.locale = 'pt-BR'
-  desc "Configura ambiente de desenvolvimento"
-  # def purge_attachments
-  #   attachments = ActiveStorage::Attachment.all
-  #   attachments.each { |attachment| attachment.purge } if attachments.length > 0
-  # end
-  task purge_files: :environment do
-    puts "Purging files"
-    attachments = ActiveStorage::Attachment.all
-    attachments.each { |attachment| attachment.purge } if attachments.length > 0
-  end
-  task setup: :environment do
-    # purge_attachments
-    puts "Creating users"
-    10.times do |i|
-      attributes = {
-        "name": Faker::Name.name,
-        "email": Faker::Internet.unique.email,
-        "password": "123456",
-        "gender": ["M", "F", "O"].sample,
-       "phone": Faker::PhoneNumber.cell_phone,
-       "document": Faker::Number.number(digits: 11),
-       "birthday": Faker::Date.between(from: '1980-09-23', to: '2014-09-25')
-
-      }
-      user = User.new(attributes)
-      user.skip_confirmation!
-      user.save!
-    end
-    1.times do |i|
-      attributes = {
-        "name": 'Admin',
-        "email": 'admin@admin.com',
-        "password": "123456",
-        "gender": ["M", "F", "O"].sample,
-        "phone": Faker::PhoneNumber.cell_phone,
          "admin": true,
          "document": CPF.generate,
-         "birthday": Faker::Date.between(from: '1980-09-23', to: '2014-09-25')
+         "birthday": Time.now
       }
       user = User.new(attributes)
       user.skip_confirmation!
@@ -154,16 +114,12 @@ namespace :dev do
     Product.all.each do |product|
       category = product.model.category.name
       if category === 'regata'
-        puts 'regata'
         images = Dir.glob(Rails.root.join('assets','regata', '*.{jpg,gif,png}'))
       elsif category === 'shorts'
-        puts 'shorts'
         images = Dir.glob(Rails.root.join('assets','shorts', '*.{jpg,gif,png}'))
       elsif category === 'tenis'
-        puts 'tenis'
         images = Dir.glob(Rails.root.join('assets','tenis', '*.{jpg,gif,png}'))
       elsif category === 'kit'
-        puts 'kit'
         images = Dir.glob(Rails.root.join('assets','kits', '*.{jpg,gif,png}'))
       end
       rand(1..3).times do |i|

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
+  include Serializer
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
-  respond_to :html, :json
+  respond_to :json
 
 
   # GET /resource/sign_up
@@ -15,9 +16,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     @user = User.new(sign_up_params)
     if @user.save
-      head :created
+      serializer(UserResource, @user, status: :created)
     else
-      render json: @user.errors, status: :unprocessable_entity
+      error_serializer(resource.errors, status: :unprocessable_entity)
     end
   end
 
@@ -70,25 +71,27 @@ class Users::RegistrationsController < Devise::RegistrationsController
     ])
   end
   def sign_up_params 
-    params.permit(
-      :name,
-      :phone,
-      :gender,
-      :email,
-      :password,
-      :password_confirmation,
-      :birthday,
-      :document,
-      addresses_attributes: [
-        :street,
-        :cep,
-        :city,
-        :complement,
-        :neighbourhood,
-        :number,
-        :state
-      ]
-    )
+    params.require(:data)
+          .require(:attributes)
+          .permit(
+            :name,
+            :phone,
+            :gender,
+            :email,
+            :password,
+            :password_confirmation,
+            :birthday,
+            :document,
+            addresses_attributes: [
+              :street,
+              :cep,
+              :city,
+              :complement,
+              :neighbourhood,
+              :number,
+              :state
+            ]
+          )
   end
 
   # If you have extra params to permit, append them to the sanitizer.
