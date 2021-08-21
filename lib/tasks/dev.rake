@@ -1,5 +1,6 @@
 
 namespace :dev do
+  require 'faker'
   Faker::Config.locale = 'pt-BR'
   desc "Configura ambiente de desenvolvimento"
   def purge_attachments
@@ -12,12 +13,7 @@ namespace :dev do
     attachments.each { |attachment| attachment.purge } if attachments.length > 0
   end
   desc "Configura ambiente de desenvolvimento"
-  # def purge_attachments
-  #   attachments = ActiveStorage::Attachment.all
-  #   attachments.each { |attachment| attachment.purge } if attachments.length > 0
-  # end
   task setup: :environment do
-    # purge_attachments
     puts "Creating users"
     1.times do |i|
       attributes = {
