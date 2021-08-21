@@ -1,5 +1,6 @@
 
 namespace :dev do
+  require 'faker'
   Faker::Config.locale = 'pt-BR'
   desc "Configura ambiente de desenvolvimento"
   def purge_attachments
