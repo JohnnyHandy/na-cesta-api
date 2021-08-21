@@ -12,6 +12,7 @@ namespace :dev do
     attachments.each { |attachment| attachment.purge } if attachments.length > 0
   end
   task setup: :environment do
+    begin
     # purge_attachments
     puts "Creating users"
     10.times do |i|
@@ -124,16 +125,12 @@ namespace :dev do
     Product.all.each do |product|
       category = product.model.category.name
       if category === 'regata'
-        puts 'regata'
         images = Dir.glob(Rails.root.join('assets','regata', '*.{jpg,gif,png}'))
       elsif category === 'shorts'
-        puts 'shorts'
         images = Dir.glob(Rails.root.join('assets','shorts', '*.{jpg,gif,png}'))
       elsif category === 'tenis'
-        puts 'tenis'
         images = Dir.glob(Rails.root.join('assets','tenis', '*.{jpg,gif,png}'))
       elsif category === 'kit'
-        puts 'kit'
         images = Dir.glob(Rails.root.join('assets','kits', '*.{jpg,gif,png}'))
       end
       rand(1..3).times do |i|
@@ -200,6 +197,9 @@ namespace :dev do
       order.save!
     end
     puts "Finished creating order_items"
+  rescue ActiveRecord::RecordInvalid => invalid
+    puts invalid.record.errors.to_json
+  end 
   end
 
 end

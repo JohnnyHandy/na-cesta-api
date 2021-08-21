@@ -10,3 +10,7 @@ pt:
               taken: 'O documento já está sendo utilizado.'
             current_password:
               invalid: 'A senha atual inserida é invalida.'
+        product:
+          attributes:
+            ref:
+              blank: 'Atributo ref nao pode estar em branco'
