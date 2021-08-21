@@ -12,34 +12,24 @@ namespace :dev do
     attachments = ActiveStorage::Attachment.all
     attachments.each { |attachment| attachment.purge } if attachments.length > 0
   end
+  desc "Configura ambiente de desenvolvimento"
+  # def purge_attachments
+  #   attachments = ActiveStorage::Attachment.all
+  #   attachments.each { |attachment| attachment.purge } if attachments.length > 0
+  # end
   task setup: :environment do
     # purge_attachments
     puts "Creating users"
-    10.times do |i|
-      attributes = {
-        "name": Faker::Name.name,
-        "email": Faker::Internet.unique.email,
-        "password": "123456",
-        "gender": ["M", "F", "O"].sample,
-       "phone": Faker::PhoneNumber.cell_phone,
-       "document": Faker::Number.number(digits: 11),
-       "birthday": Faker::Date.between(from: '1980-09-23', to: '2014-09-25')
-
-      }
-      user = User.new(attributes)
-      user.skip_confirmation!
-      user.save!
-    end
     1.times do |i|
       attributes = {
         "name": 'Admin',
         "email": 'admin@admin.com',
         "password": "123456",
         "gender": ["M", "F", "O"].sample,
-        "phone": Faker::PhoneNumber.cell_phone,
+        "phone": '83999999999',
          "admin": true,
          "document": CPF.generate,
-         "birthday": Faker::Date.between(from: '1980-09-23', to: '2014-09-25')
+         "birthday": Time.now
       }
       user = User.new(attributes)
       user.skip_confirmation!
