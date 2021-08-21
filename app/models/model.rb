@@ -31,6 +31,15 @@ class Model < ApplicationRecord
    'Utah Jazz': 28,
    'Washington Wizards': 29
   }
+  validates :ref,
+            :name,
+            :description,
+            :discount,
+            :team,
+            :price,
+            :deal_price,
+            :category_id,
+            presence: true
   has_many :products
   belongs_to :category
 end
