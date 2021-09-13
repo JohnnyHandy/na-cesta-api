@@ -16,7 +16,6 @@ module Serializer
   end
 
   def serializer(resource, instance, *opts)
-    # resource = ProductResource
     serializer = JSONAPI::ResourceSerializer.new(resource, include: opts&.first&.dig(:include)||[''])
     resource_instance = resource.new(instance, {})
     as_json = serializer.object_hash(resource_instance, {})
@@ -29,7 +28,7 @@ module Serializer
     resource_set = get_resource_set(ids)
     resource_set.populate!(JSONAPI::ResourceSerializer.new(klass), nil, include: opts&.first&.dig(:include)||[''])
     if ids.is_a?(Array)
-      JSONAPI::ResourceSerializer.new(klass).serialize_resource_set_to_hash_plural(resource_set)
+      {**JSONAPI::ResourceSerializer.new(klass).serialize_resource_set_to_hash_plural(resource_set), pagination: opts&.first&.dig(:pagination)}
      else
       JSONAPI::ResourceSerializer.new(klass).serialize_resource_set_to_hash_single(resource_set)
      end

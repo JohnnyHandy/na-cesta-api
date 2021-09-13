@@ -15,6 +15,7 @@ class OrderResource < JSONAPI::Resource
     :created_at,
     :address,
     :order_items
+    :order_items_attributes
   has_many :order_items
   has_many :products, :through => :order_items
   has_one :user

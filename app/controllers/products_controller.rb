@@ -7,22 +7,38 @@ class ProductsController < ApplicationController
     products = params[:model_id] ?
       Product.where(model_id: params[:model_id]) :
       Product.all
+    q = products.ransack(params[:q])
+    results = q.result.paginate(page: params[:page], per_page: params[:per_page])
     idsArray = []
-    products.each { |product|  idsArray << product.id }  
-    render status: 200, json: json_resources(ProductResource, products, idsArray, nil)
+    results.each { |product|  idsArray << product.id }  
+    # render status: 200, json: json_resources(ProductResource, productList, idsArray, nil)
+    render status: 200,
+    json: json_resources(
+      ProductResource,
+      results,
+      idsArray,
+      {
+        pagination:
+        {
+          page: params[:page],
+          per_page: params[:per_page],
+          total: q.result.count
+        }
+      }
+    )
+
   end
 
   # GET /products/1
   def show
-    serializer(ProductResource, @product, status: :ok, include: ['stocks', 'images'])
+    render status: :ok, json: json_resources(ProductResource, @product, @product.id, include: ['stocks', 'images'])
   end
 
 #   # POST /products
   def create
     @product = Product.new(product_params)
-
     if @product.save
-      serializer(ProductResource, @product, status: :created)
+      render status: :created, json: json_resources(ProductResource, @product, @product.id)
     else
       error_serializer(@product.errors, status: :unprocessable_entity)
     end
@@ -30,7 +46,7 @@ class ProductsController < ApplicationController
 
   def update
     if @product.update(product_params)
-      serializer(ProductResource, @product, status: :created)
+      render status: :created, json: json_resources(ProductResource, @product, @product.id)
     else
       error_serializer(@product.errors, status: :unprocessable_entity)
     end
@@ -47,7 +63,7 @@ class ProductsController < ApplicationController
     product = Product.find(params[:product_id])
     image = product.images.find(params[:image_id])
     if image.update(product_params)
-      serializer(ImageResource, image, status: :ok)
+      render status: :ok, json: json_resources(ImageResource, image, image.id)
     else
       error_serializer(image.errors, status: :unprocessable_entity)
     end
@@ -57,7 +73,7 @@ class ProductsController < ApplicationController
   def purge_image
     product = Product.find(params[:product_id])
     product.images.find(params[:image_id]).purge
-    head :created
+    head :no_content
   end
 
 #PATCH /products/1/stocks/1
@@ -66,7 +82,7 @@ class ProductsController < ApplicationController
     stock = product.stocks.find(params[:stock_id])
     stock.update!(stock_params)
     if stock.update(product_params)
-      serializer(StockResource, stock, status: :ok)
+      render status: :ok, json: json_resources(StockResource, stock, stock.id)
     else
       error_serialize(stock.errors, status: :unprocessable_entity)
     end
@@ -83,9 +99,7 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
-      
     end
-    
 
     # Only allow a list of trusted parameters through.
     def product_params
