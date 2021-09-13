@@ -7,17 +7,45 @@ class ModelsController < ApplicationController
   def index
     q = Model.ransack(params[:q])
     models = q.result
+    paginatedModels = models.paginate(page: params[:page], per_page: params[:per_page])
     idsArray = []
-    models.each { |model|  idsArray << model.id }
-    render status: 200, json: json_resources(ModelResource, @models, idsArray)
+    paginatedModels.each { |model|  idsArray << model.id }
+    render status: 200,
+      json: json_resources(
+        ModelResource,
+        paginatedModels,
+        idsArray,
+        {
+          pagination:
+          {
+            page: params[:page],
+            per_page: params[:per_page],
+            total: models.count
+          }
+        }
+      )
   end
 
   # GET /models/1/products
   def model_products
-    products = @model.products
+    products = @model.products.ransack(params[:q])
+    paginatedProducts = products.paginate(page: params[:page], per_page: params[:per_page])
     idsArray = []
-    products.each { |product|  idsArray << product.id }
-    render status: 200, json: json_resources(ProductResource, products, idsArray)
+    paginatedProducts.each { |product|  idsArray << product.id }
+    render status: 200,
+      json: json_resources(
+        ProductResource,
+        products,
+        idsArray,
+        {
+          pagination:
+          {
+            page: params[:page],
+            per_page: params[:per_page],
+            total: products.count
+          }
+        }
+      )
   end
 
   # # POST /models
